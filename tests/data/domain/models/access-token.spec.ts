@@ -5,4 +5,8 @@ describe('Access Token MOdel', () => {
     const sut = new AccessToken('any_value')
     expect(sut).toEqual({ value: 'any_value' })
   })
+
+  it('should expire in 1800000 milliseconds', () => {
+    expect(AccessToken.expirationInMilliseconds).toBe(1800000)
+  })
 })
