@@ -14,9 +14,7 @@ describe('Facebook Authentication Service', () => {
   beforeEach(() => {
     facebookApi = mock()
     userAccountRepo = mock()
-
     userAccountRepo.load.mockResolvedValue(undefined)
-
     facebookApi.loadUser.mockResolvedValueOnce({
       name: 'any_fb_name',
       email: 'any_fb_email',
@@ -30,14 +28,12 @@ describe('Facebook Authentication Service', () => {
 
   it('should call LoadUserFacebookApi with correct parameters', async () => {
     await sut.execute({ token })
-
     expect(facebookApi.loadUser).toHaveBeenCalledWith({ token })
     expect(facebookApi.loadUser).toHaveBeenCalledTimes(1)
   })
 
   it('should return authentication error when LoadUserFacebookApi returns undefined', async () => {
     facebookApi.loadUser.mockResolvedValueOnce(undefined)
-
     const authResult = await sut.execute({ token })
 
     expect(authResult).toEqual(new AuthenticationError())
@@ -45,14 +41,12 @@ describe('Facebook Authentication Service', () => {
 
   it('should call LoadUserAccountRepo when LoadFacebokoUserApi returns data', async () => {
     await sut.execute({ token })
-
     expect(userAccountRepo.load).toHaveBeenCalledWith({ email: 'any_fb_email' })
     expect(userAccountRepo.load).toHaveBeenCalledTimes(1)
   })
 
   it('should create account with facebook data', async () => {
     await sut.execute({ token })
-
     expect(userAccountRepo.saveWithFacebook).toHaveBeenCalledWith({
       name: 'any_fb_name',
       email: 'any_fb_email',
@@ -66,9 +60,7 @@ describe('Facebook Authentication Service', () => {
       id: 'any_id',
       name: 'any_name'
     })
-
     await sut.execute({ token })
-
     expect(userAccountRepo.saveWithFacebook).toHaveBeenCalledWith({
       id: 'any_id',
       name: 'any_name',
@@ -82,9 +74,7 @@ describe('Facebook Authentication Service', () => {
     userAccountRepo.load.mockResolvedValueOnce({
       id: 'any_id'
     })
-
     await sut.execute({ token })
-
     expect(userAccountRepo.saveWithFacebook).toHaveBeenCalledWith({
       id: 'any_id',
       name: 'any_fb_name',
