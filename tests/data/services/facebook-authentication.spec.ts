@@ -46,7 +46,6 @@ describe('Facebook Authentication Service', () => {
   it('should return authentication error when LoadUserFacebookApi returns undefined', async () => {
     facebookApi.loadUser.mockResolvedValueOnce(undefined)
     const authResult = await sut.execute({ token })
-
     expect(authResult).toEqual(new AuthenticationError())
   })
 
@@ -59,16 +58,13 @@ describe('Facebook Authentication Service', () => {
   it('should call SaveFacebookAccountRepository with FacebookAccount', async () => {
     const facebookAccountStub = jest.fn().mockImplementation(() => ({ any: 'any' }))
     mocked(FacebookAccount).mockImplementation(facebookAccountStub)
-
     await sut.execute({ token })
-
     expect(userAccountRepository.saveWithFacebook).toHaveBeenCalledWith({ any: 'any' })
     expect(userAccountRepository.saveWithFacebook).toHaveBeenCalledTimes(1)
   })
 
   it('should call TokenGenerator with correct params', async () => {
     await sut.execute({ token })
-
     expect(cryptography.generateToken).toHaveBeenCalledWith({
       key: 'any_account_id',
       expirationInMiliseconds: AccessToken.expirationInMilliseconds
