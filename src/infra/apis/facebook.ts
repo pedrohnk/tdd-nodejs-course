@@ -1,0 +1,23 @@
+import { type LoadFacebookUserApi } from '@/data/contracts/apis'
+import { type HttpGetClient } from '@/infra/http'
+
+export class FacebookApi {
+  private readonly BASE_FACEBOOK_URL = 'https://graph.facebook.com'
+
+  constructor (
+    private readonly httpClient: HttpGetClient,
+    private readonly clientId: string,
+    private readonly clientSecret: string
+  ) {}
+
+  async loadUser (params: LoadFacebookUserApi.Params): Promise<void> {
+    await this.httpClient.get({
+      url: `${this.BASE_FACEBOOK_URL}/oauth/access_token`,
+      params: {
+        client_id: this.clientId,
+        client_secret: this.clientSecret,
+        grant_type: 'client_credentials'
+      }
+    })
+  }
+}
